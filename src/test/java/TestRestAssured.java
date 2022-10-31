@@ -88,16 +88,7 @@ public class TestRestAssured {
 
     }
 
-    public Object method(){
-        if (i==1){
-            return "123";
-        }
 
-    }
-
-    public int method(){
-        return 123;
-    }
 
 
 }
