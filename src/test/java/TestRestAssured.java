@@ -3,6 +3,13 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+
+
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static  org.hamcrest.Matchers.hasKey;
+
 public class TestRestAssured {
     @Test
     public void testJsonParse() {
@@ -65,7 +72,7 @@ public class TestRestAssured {
     }
 
     @Test
-    public void testToken() {
+    public void testToken() throws InterruptedException {
 
         String url = "https://playground.learnqa.ru/ajax/api/longtime_job";
 
@@ -79,9 +86,44 @@ public class TestRestAssured {
         String token =responseFirst.getString("token");
         System.out.println(token);
 
-        String time =responseFirst.getString("seconds");
-        int seconds = Integer.parseInt(time);
+        Integer time =responseFirst.getInt("seconds");
         System.out.println(time);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("token", token);
+        Response responseTimeNotPassed= RestAssured
+                .given()
+                .params(params)
+                .get(url)
+                .andReturn();
+        responseTimeNotPassed.prettyPrint();
+        String status = responseTimeNotPassed.jsonPath().getString("status");
+        assertEquals("Job is NOT ready", status,
+                "The status is not correct when time is not passed.");
+
+
+
+
+        TimeUnit.SECONDS.sleep(time);
+        Response responseTimePassed= RestAssured
+                .given()
+                .params(params)
+                .get(url)
+                .andReturn();
+        responseTimePassed.prettyPrint();
+
+        status = responseTimePassed.jsonPath().getString("status");
+
+
+        assertEquals("Job is ready", status,
+                "The status is not correct when time is not passed.");
+        responseTimePassed.then().assertThat().body("$", hasKey("result"));
+
+
+
+
+
+
 
 
 
