@@ -35,6 +35,8 @@ public class TestRestAssured {
     }
 
 
+
+
     @Test
     public void testLongRedirect() {
         int responceCode = 0;
@@ -62,6 +64,40 @@ public class TestRestAssured {
 
     }
 
-   
+    @Test
+    public void testToken() {
+
+        String url = "https://playground.learnqa.ru/ajax/api/longtime_job";
+
+        JsonPath responseFirst = RestAssured
+                .given()
+                .get(url)
+                .jsonPath();
+
+
+        responseFirst.prettyPrint();
+        String token =responseFirst.getString("token");
+        System.out.println(token);
+
+        String time =responseFirst.getString("seconds");
+        int seconds = Integer.parseInt(time);
+        System.out.println(time);
+
+
+
+
+    }
+
+    public Object method(){
+        if (i==1){
+            return "123";
+        }
+
+    }
+
+    public int method(){
+        return 123;
+    }
+
 
 }
