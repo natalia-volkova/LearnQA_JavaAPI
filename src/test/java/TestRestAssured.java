@@ -1,14 +1,19 @@
 import io.restassured.RestAssured;
+
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import lib.Assertions;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 
 import java.util.HashMap;
+
 import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static  org.hamcrest.Matchers.hasKey;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestRestAssured {
     @Test
@@ -120,15 +125,46 @@ public class TestRestAssured {
         responseTimePassed.then().assertThat().body("$", hasKey("result"));
 
 
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"Less than 15", "Test string length more than 15", "Test string 15s"})
+    public void assertLenght(String string){
+
+        assertTrue(string.length()>15, "The length of string is less than 15");
+    }
+
+    @Test
+    public void testCookie(){
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_cookie")
+                .andReturn();
 
 
+        Assertions.assertCookieByName(response, "HomeWork", "hw_value");
 
 
+    }
+
+    @Test
+    public void testHeader(){
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_header")
+                .andReturn();
+
+
+        Assertions.assertHeaderByName(response, "x-secret-homework-header", "Some secret value");
 
 
 
 
     }
+
+
+
+
+
 
 
 
