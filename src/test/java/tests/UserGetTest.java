@@ -1,20 +1,26 @@
 package tests;
 
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Epic("Get data cases")
+@Feature("Get userdata cases")
 public class UserGetTest extends BaseTestCase {
 
     ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
-
+    @Description("This test checks get user data if user is not authorized")
+    @DisplayName("Get user data: negative test: Not authorized user")
     @Test
     public void getUserDateNotAuth(){
 
@@ -28,7 +34,8 @@ public class UserGetTest extends BaseTestCase {
         Assertions.assertJsonHasNotField(responseUserData, "lastName");
         Assertions.assertJsonHasNotField(responseUserData, "email");
     }
-
+    @Description("This test checks get user data ")
+    @DisplayName("Get user data: positive test")
     @Test
     public void testGetUserDetailsAuthAsSameUser(){
         Map<String, String> authData = new HashMap<>();
@@ -52,7 +59,8 @@ public class UserGetTest extends BaseTestCase {
 
         Assertions.assertJsonHasFields(responseCheckAuth, expectedFields);
     }
-
+    @Description("This test checks get user data if other user is authorized")
+    @DisplayName("Get user data: negative test: Other authorized user")
     @Test
     public void testGetUserDetailsAuthOtherUser(){
 
@@ -69,7 +77,9 @@ public class UserGetTest extends BaseTestCase {
         authData.put("email", userData.get("email"));
         authData.put("password", userData.get("password"));
 
-        Response responseGetAuth = apiCoreRequests.makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
+        Response responseGetAuth = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/api/user/login",
+                authData);
 
 
         String cookie = this.getCookie(responseGetAuth, "auth_sid");
