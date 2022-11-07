@@ -28,4 +28,15 @@ public class BaseTestCase {
         return response.jsonPath().getInt(name);
     }
 
+    public static void printValues(Map<String, String> map)
+    {
+        for(Map.Entry<String, String> pair : map.entrySet())
+        {
+            String key = pair.getKey();
+            String value = pair.getValue();
+            System.out.println("Key: "+key);
+            System.out.println("Value: "+value);
+        }
+    }
+
 }
