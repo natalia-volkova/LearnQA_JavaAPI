@@ -14,7 +14,7 @@ public class ApiCoreRequests {
         return         given()
                 .filter(new AllureRestAssured())
                 .header(new Header("x-csrf-token", token))
-                .cookie("auth-sid", cookie)
+                .cookie("auth_sid", cookie)
                 .log().all()
                 .get(url)
                 .andReturn();
@@ -26,7 +26,7 @@ public class ApiCoreRequests {
     public Response makeGetRequestWithCookie(String url, String cookie){
         return         given()
                 .filter(new AllureRestAssured())
-                .cookie("auth-sid", cookie)
+                .cookie("auth_sid", cookie)
                 .get(url)
                 .andReturn();
 
@@ -38,6 +38,15 @@ public class ApiCoreRequests {
                 .filter(new AllureRestAssured())
                 .header(new Header("x-csrf-token", token))
 
+                .get(url)
+                .andReturn();
+
+    }
+
+    @Step("Make a GET-request without fields")
+    public Response makeGetRequest(String url){
+        return         given()
+                .filter(new AllureRestAssured())
                 .get(url)
                 .andReturn();
 

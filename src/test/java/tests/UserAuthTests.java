@@ -62,10 +62,11 @@ public class UserAuthTests extends BaseTestCase {
     @DisplayName("Test positive auth user")
     public void testAuthUser(){
 
-        Response responseCheckAuth = apiCoreRequests.makeGetRequest("https://playground.learnqa.ru/api/user/auth", this.header, this.cookie);
-
-        responseCheckAuth.then().log().all();
-
+        Response responseCheckAuth = apiCoreRequests
+                .makeGetRequest(
+                        "https://playground.learnqa.ru/api/user/auth",
+                        this.header,
+                        this.cookie);
 
         Assertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
 
